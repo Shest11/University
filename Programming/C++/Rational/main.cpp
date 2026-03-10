@@ -1,61 +1,52 @@
 #include "rational.h"
-#include <string>
 #include <iostream>
-#include <cmath>
 using namespace std;
 
 int main() {
-  string a, b, c;
-  int index_, xa, ya, xb, yb, xc, yc;
 
-  cout << "Введите a (в формате x/y): ";
-  cin >> a;
-  for (int i = 0; i < a.length(); i++) {
-    if (a[i] == '/')
-      index_ = i;
-  }
-  xa = stoi(a.substr(0, index_));
-  ya = stoi(a.substr(index_+1));
+  // Тестируем конструктор, +, -, *=, /, <<
+  Rational a(1,2), b(-1,6);
+  cout<<"a="<<a<<" b="<<b<<" a+b="<<a+b<<endl;
+  cout<<"a("<<a<<") *= b("<<b<<")"<<endl;
+  a *= b;
+  cout<<"a="<<a<<" b="<<b<<" a-b="<<a+(-b)<<endl;
+  Rational c=3;
+  cout<<"b="<<b<<" c="<<c<<" b/c="<<b/c<<endl;
 
-  cout << "Введите b (в формате x/y): ";
-  cin >> b;
-  for (int i = 0; i < b.length(); i++) {
-    if (b[i] == '/')
-      index_ = i;
-  }
-  xb = stoi(b.substr(0, index_));
-  yb = stoi(b.substr(index_+1));
+  // Тестируем >>, !=
+  Rational e(7,8), f(5,12);
+  cout<<"e="<<e<<" f="<<f<<" e+f=?"<<endl;
+  cout<<"Введите результат g=m/n в формате: m n"<<endl;
+  Rational g;
+  cin>>g;
+  if (e+f!=g)
+    cout<<"Неправильно! e+f="<<e+f<<endl;
+  else
+    cout<<"Правильно!"<<endl;
 
-  cout << "Введите c (в формате x/y): ";
-  cin >> c;
-  for (int i = 0; i < c.length(); i++) {
-    if (c[i] == '/')
-      index_ = i;
-  }
-  xc = stoi(c.substr(0, index_));
-  yc = stoi(c.substr(index_+1));
+  Rational ra;
+  cout << "Введите a=x/y (в формате x y): ";
+  cin >> ra;
 
-  Rational ra(xa, ya);
-  Rational rb(xb, yb);
-  Rational rc(xc, yc);
-  Rational four(4);
-  Rational two(2);
-  Rational D(0);
-  Rational x1(1);
-  Rational x2(1);
+  Rational rb;
+  cout << "Введите b=x/y (в формате x y): ";
+  cin >> rb;
 
-  D = rb * rb + (-(four * ra * rc));
+  Rational rc;
+  cout << "Введите с=x/y (в формате x y): ";
+  cin >> rc;
+
+  Rational D;
+  Rational x1;
+  Rational x2;
+
+  D = rb * rb + (-(ra * rc * 4));
   D.simplify();
 
-  Rational Dn(int(sqrt(D.numer)));
-  Rational Dd(1, int(sqrt(D.denom)));
-  Rational a2(1, two * ra);
-
-  x1 = ((-rb) + Dn * Dd) * a2;
-  x2 = ( (-rb) + (-(Dn * Dd)) ) * a2;
-
-  cout << "x1: " << x1.numer << " / " << x1.denom << endl;
-  cout << "x2: " << x2.numer << " / " << x2.denom << endl;
-
-  return 0;
+  x1 = ((-rb) + Rational::sqrt(D)) / (ra * 2);
+  x2 = ((-rb) + (-(Rational::sqrt(D)))) / (ra * 2);
+  x1.simplify();
+  x2.simplify();
+  cout << "x1: " << x1 << endl;
+  cout << "x2: " << x2 << endl;
 }

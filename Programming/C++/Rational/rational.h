@@ -1,5 +1,4 @@
-#ifndef RATIONAL_H
-#define RATIONAL_H
+#pragma once
 #include <iostream>
 using namespace std;
 
@@ -33,7 +32,11 @@ public:
   Rational operator *(const Rational& other) const;
   Rational& operator *=(const Rational& other);
 
+  Rational operator /(const Rational& other) const;
+
+  Rational operator *(int n) const;
+  friend Rational operator *(int n, const Rational& r);
+
+  static Rational sqrt(Rational r);
 
 };
-
-#endif // RATIONAL_H

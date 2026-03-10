@@ -1,5 +1,6 @@
 #include "rational.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -107,6 +108,7 @@ istream& operator >>(istream& in, Rational& r)
   in>>r.numer>>r.denom;
   return in;
 }
+
 ostream& operator <<(ostream& out, const Rational& r)
 {
   out<<r.numer<<"/"<<r.denom;
@@ -121,7 +123,50 @@ Rational& Rational::operator *=(const Rational& other) {
 }
 
 Rational Rational::operator *(const Rational& other) const {
+
   Rational res(*this);
   res *= other;
+  return res;
+}
+
+Rational Rational::operator /(const Rational& other) const {
+
+  Rational res(*this);
+  res.numer *= other.denom;
+  res.denom *= other.numer;
+  return res;
+}
+
+Rational Rational::operator *(int n) const {
+
+  Rational res(*this);
+  res.numer *= n;
+  return res;
+}
+
+Rational operator *(int n, const Rational& r) {
+  return r * n;
+}
+
+Rational Rational::sqrt(Rational r) {
+  int exp;
+  double doub_r = r;
+  double mantissa = frexp(doub_r, &exp);
+
+  int s_num = std::round(std::sqrt(r.numer));
+  int s_den = std::round(std::sqrt(r.denom));
+
+  if (s_num * s_num == r.numer and s_den * s_den == r.denom) {
+    return Rational(s_num, s_den);
+  }
+
+  if (abs(exp) % 2 != 0) {
+    exp--;
+    mantissa *= 2;
+  }
+
+  doub_r = ldexp(std::sqrt(mantissa), exp / 2);
+  Rational res((doub_r * 1000), 1000);
+  res.simplify();
   return res;
 }
