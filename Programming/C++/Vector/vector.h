@@ -3,9 +3,7 @@
 using namespace std;
 
 const int DEFAULT_CAPACITY=10;
-class ArrayException {
-
-};
+class ArrayException {};
 
 class Array {
 public:

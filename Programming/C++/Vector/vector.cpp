@@ -10,12 +10,10 @@ Array::Array(int startCapacity)
     capacity = startCapacity;
   ptr = new int[capacity];
   size = 0;
-  cout << "Конструктор выполнен" << endl;
 }
 Array::~Array()
 {
   delete[] ptr;
-  cout << "Деструктор выполнен" << endl;
 }
 Array::Array(const Array &other)
 {
