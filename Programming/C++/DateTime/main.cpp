@@ -1,32 +1,53 @@
+#include "moon.h"
+#include <fstream>
+#include <sstream>
 #include "datetime.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 int main() {
-    DateTime dt1, dt2;
-    int days;
-    cin >> dt1;
-    cout << "Вы ввели дату: " << dt1 << endl;
-    cout << "Её день недели: ";
-    dt1.dayOfWeek();
+    string input, obj, line;
+    bool flag = true;
+    int day, month, year;
 
-    cin >> dt2;
-    cout << "Вы ввели дату: " << dt1 << endl;
-    cout << "Её день недели: ";
-    dt2.dayOfWeek();
+    // cout << "Ведите дату в формате дд.мм.гггг: ";
+    // cin >> input;
+    //
+    // for (int i = 0; i < input.length(); i++) {
+    //     obj += input[i];
+    //     if ((input[i] == '.') and (flag)) {
+    //         day = stoi(obj);
+    //         flag = false;
+    //         obj = "";
+    //     }
+    //     else if ((input[i] == '.') and (!flag)) {
+    //         month = stoi(obj);
+    //         flag = true;
+    //         obj = "";
+    //     }
+    //     else if (i == 9)
+    //         year = stoi(obj);
+    // }
+    //
+    // Moon dt(year, month, day);
+    // cout << dt;
 
-    cout << endl;
-    cout << endl << "Разница между ними: " << abs(dt2 - dt1) << endl;
+    ifstream file("Moon/moon1998.dat");
 
-    cout << "Насколько увеличить первую дату: ";
-    cin >> days;
-    dt1 + days;
-    cout << "Теперь первая дата: " << dt1;
+    string ymd, hms;
+    double el;
+    getline(file, line);
 
-    cout << endl;
-    cout << "Даты равны: " << (dt1 == dt2 ? "Да" : "Нет") << endl;
-    cout << "Первая больше: " << (dt1 > dt2 ? "Да" : "Нет") << endl;
-    cout << "Первая меньше: " << (dt1 < dt2 ? "Да" : "Нет") << endl;
-    cout << "Первая больше или равна: " << (dt1 >= dt2 ? "Да" : "Нет") << endl;
-    cout << "Первая меньше или равна: " << (dt1 <= dt2 ? "Да" : "Нет") << endl;
+    while (getline(file, line)) {
+
+        stringstream ss(line);
+
+        ss >> ymd >> hms >> el;
+
+        cout << "Дата: " << ymd << endl;
+        cout << "Время: " << hms << endl;
+        cout << "Градус:" << el << endl;
+    }
+
 }
