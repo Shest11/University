@@ -27,5 +27,5 @@ public:
 
     friend istream& operator >> (istream& is, DateTime& dt);
     friend ostream& operator << (ostream& os, const DateTime& dt);
-
+    friend class Moon;
 };
