@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-Moon::Moon() : date(0, 0, 0) {}
+Moon::Moon() : date(1900, 1, 1) {}
 
 Moon::Moon(int day, int month, int year) : date(year, month, day) {}
 
@@ -31,8 +31,11 @@ istream& operator>>(istream& is, Moon& moon) {
             flag = true;
             obj = "";
         }
-        else if (i == 9)
+        else if (i == 9) {
             year = stoi(obj);
+            obj = "";
+        }
+
     }
 
     moon = Moon(day, month, year);
