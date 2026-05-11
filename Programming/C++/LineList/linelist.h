@@ -44,7 +44,11 @@ public:
 
     void makeCircular();
 
-    void iosif(int N);
+    void breakCircular(LineListElem* last);
+
+    void setStart(LineListElem* newStart);
+
+    bool isEmpty() const;
 };
 
 template<class T>
@@ -99,10 +103,7 @@ ostream& operator<<(ostream& out, LineList<T>& list) {
     if (ptr == nullptr) {
         out << "EMPTY";
     } else {
-        while (ptr != nullptr) {
-            out << ptr->getData() << " ";
-            ptr = ptr->getNext();
-        }
+        out << ptr->getData();
     }
     return out;
 }
@@ -118,18 +119,16 @@ void LineList<T>::makeCircular() {
 }
 
 template<class T>
-void LineList<T>::iosif(int N) {
-    for (int data = N; data > 0; data--)
-        insertFirst(data);
-    makeCircular();
+void LineList<T>::breakCircular(LineListElem* last) {
+    if (last) last->next = nullptr;
+}
 
-    LineListElem* node = start;
-    for (int i = 0; i < N - 1; i++) {
-        deleteAfter(node);
-        node = node->next;
+template<class T>
+void LineList<T>::setStart(LineListElem* newStart) {
+    start = newStart;
+}
 
-    }
-
-    start = node;
-    start->next = nullptr;
+template<class T>
+bool LineList<T>::isEmpty() const {
+    return start == nullptr;
 }
