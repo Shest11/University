@@ -6,50 +6,44 @@ using namespace std;
 
 Rational::Rational()
 {
-  numer=0;
-  denom=1;
+  numer = 0;
+  denom = 1;
 }
 
-Rational::Rational(int n)
+Rational::Rational(long long n)
 {
-  numer=n;
-  denom=1;
+  numer = n;
+  denom = 1;
 }
 
-Rational::Rational(int n, int d)
+Rational::Rational(long long n, long long d)
 {
-  numer=n;
-  denom=d;
+  numer = n;
+  denom = d;
 }
 
 Rational& Rational::operator +=(const Rational& r) {
-  numer = (numer*r.denom+denom*r.numer);
+  numer = (numer * r.denom + denom * r.numer);
   denom *= r.denom;
-  // this - указатель на себя
-  // *this - ссылка на себя
   simplify();
   return *this;
 }
 
 void Rational::simplify() {
   if (denom == 0) return;
-
   if (denom < 0) {
     numer = -numer;
     denom = -denom;
   }
 
-  int a = abs(numer);
-  int b = denom;
-
+  long long a = llabs(numer);
+  long long b = denom;
   while (b != 0) {
-    int temp = b;
+    long long temp = b;
     b = a % b;
     a = temp;
   }
-
-  int nod = a;
-
+  long long nod = a;
   if (nod != 0) {
     numer /= nod;
     denom /= nod;
@@ -61,14 +55,12 @@ Rational Rational::operator +(const Rational &other) const {
   return res += other;
 }
 
-Rational Rational::operator -() const
-{
+Rational Rational::operator -() const {
   Rational r(-numer, denom);
   return r;
 }
 
 Rational& Rational::operator -=(const Rational &other) {
-
   return (*this += (-other));
 }
 
@@ -83,35 +75,21 @@ Rational Rational::operator ++(int) {
   return r;
 }
 
-bool Rational::operator ==(const Rational &other) const{
-
-  return (numer==other.numer) and (denom==other.denom);
+bool Rational::operator ==(const Rational &other) const {
+  return (numer == other.numer) and (denom == other.denom);
 }
 
-bool Rational::operator !=(const Rational &other) const{
-
+bool Rational::operator !=(const Rational &other) const {
   return !(*this == other);
 }
 
-Rational::operator int() const {
-
-  return numer / denom;
-}
-
-Rational::operator double() const {
-
-  return (double(numer) / denom);
-}
-
-istream& operator >>(istream& in, Rational& r)
-{
-  in>>r.numer>>r.denom;
+istream& operator >>(istream& in, Rational& r) {
+  in >> r.numer >> r.denom;
   return in;
 }
 
-ostream& operator <<(ostream& out, const Rational& r)
-{
-  out<<r.numer<<"/"<<r.denom;
+ostream& operator <<(ostream& out, const Rational& r) {
+  out << r.numer << "/" << r.denom;
   return out;
 }
 
@@ -123,50 +101,38 @@ Rational& Rational::operator *=(const Rational& other) {
 }
 
 Rational Rational::operator *(const Rational& other) const {
-
   Rational res(*this);
   res *= other;
   return res;
 }
 
 Rational Rational::operator /(const Rational& other) const {
-
   Rational res(*this);
   res.numer *= other.denom;
   res.denom *= other.numer;
+  res.simplify();
   return res;
 }
 
-Rational Rational::operator *(int n) const {
-
+Rational Rational::operator *(long long n) const {
   Rational res(*this);
   res.numer *= n;
+  res.simplify();
   return res;
 }
 
-Rational operator *(int n, const Rational& r) {
+Rational operator *(long long n, const Rational& r) {
   return r * n;
 }
 
 Rational Rational::sqrt(Rational r) {
-  int exp;
-  double doub_r = r;
-  double mantissa = frexp(doub_r, &exp);
+  long long s_num = std::llround(std::sqrt((long double)r.numer));
+  long long s_den = std::llround(std::sqrt((long double)r.denom));
 
-  int s_num = std::round(std::sqrt(r.numer));
-  int s_den = std::round(std::sqrt(r.denom));
-
-  if (s_num * s_num == r.numer and s_den * s_den == r.denom) {
+  if (s_num * s_num == r.numer && s_den * s_den == r.denom) {
     return Rational(s_num, s_den);
   }
 
-  if (abs(exp) % 2 != 0) {
-    exp--;
-    mantissa *= 2;
-  }
-
-  doub_r = ldexp(std::sqrt(mantissa), exp / 2);
-  Rational res((doub_r * 1000), 1000);
-  res.simplify();
-  return res;
+  // Возвращаем 0/1, если точный корень не найден
+  return Rational(0, 1);
 }
