@@ -1,30 +1,29 @@
 #include "func.h"
 #include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
 
 int main() {
-    Hyperbola hyp(1, 2);
-    cout << "Гипербола" << endl;
-    hyp.func_calc();
-    hyp.get_max_min(2, 6);
-    hyp.differentiation();
-    hyp.integration();
+    vector<Function*> functions;
 
-    cout << endl;
+    functions.push_back(new Hyperbola(1, 2));
+    functions.push_back(new Parabola(3, -5, 8, 2));
+    functions.push_back(new Exponent(2, 0.5, 2));
 
-    Parabola par(3, -5, 8, 2);
-    cout << "Парабола" << endl;
-    par.func_calc();
-    par.get_max_min(2, 6);
-    par.differentiation();
-    par.integration();
+    vector<string> names = {"Гипербола", "Парабола", "Экспонента"};
 
-    cout << endl;
+    for (size_t i = 0; i < functions.size(); ++i) {
+        cout << names[i] << endl;
+        functions[i]->func_calc();
+        functions[i]->get_max_min(2, 6);
+        functions[i]->differentiation();
+        functions[i]->integration();
+        cout << endl;
+    }
 
-    Exponent expo(2, 0.5, 2);
-    cout << "Экспонента" << endl;
-    expo.func_calc();
-    expo.get_max_min(2, 6);
-    expo.differentiation();
-    expo.integration();
+    for (size_t i = 0; i < functions.size(); ++i) {
+        delete functions[i];
+    }
+
 }
