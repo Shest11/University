@@ -8,6 +8,8 @@ int main() {
     const Point pt1(3, 4);
     const Point pt2(5, 1);
     const Point pt3(6, 8);
+    double general_area = 0;
+    double general_perimetr = 0;
 
     vector<Shape*> shapes;
 
@@ -22,11 +24,15 @@ int main() {
         cout << "Площадь: " << shapes[i]->calc_area() << endl;
         cout << "Периметр: " << shapes[i]->calc_perimetr() << endl;
         cout << "" << endl;
+        general_area += shapes[i]->calc_area();
+        general_perimetr += shapes[i]->calc_perimetr();
     }
+
+    cout << "Общая площадь: " << general_area << endl;
+    cout << "Общий периметр: " << general_perimetr << endl;
 
     for (size_t i = 0; i < shapes.size(); ++i) {
         delete shapes[i];
     }
     shapes.clear();
-
 }
