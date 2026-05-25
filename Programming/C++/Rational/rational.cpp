@@ -22,6 +22,11 @@ Rational::Rational(long long n, long long d)
   denom = d;
 }
 
+// Реализация свободной функции abs
+Rational abs(const Rational& r) {
+    return Rational(std::abs(r.numer), r.denom);
+}
+
 Rational& Rational::operator +=(const Rational& r) {
   numer = (numer * r.denom + denom * r.numer);
   denom *= r.denom;
@@ -55,6 +60,11 @@ Rational Rational::operator +(const Rational &other) const {
   return res += other;
 }
 
+Rational Rational::operator -(const Rational &other) const {
+  Rational res(*this);
+  return res += (-other);
+}
+
 Rational Rational::operator -() const {
   Rational r(-numer, denom);
   return r;
@@ -81,6 +91,14 @@ bool Rational::operator ==(const Rational &other) const {
 
 bool Rational::operator !=(const Rational &other) const {
   return !(*this == other);
+}
+
+bool Rational::operator >(const Rational &other) const {
+  return (numer * other.denom) > (other.numer * denom);
+}
+
+bool Rational::operator <(const Rational &other) const {
+  return (numer * other.denom) < (other.numer * denom);
 }
 
 istream& operator >>(istream& in, Rational& r) {
@@ -125,14 +143,44 @@ Rational operator *(long long n, const Rational& r) {
   return r * n;
 }
 
-Rational Rational::sqrt(Rational r) {
-  long long s_num = std::llround(std::sqrt((long double)r.numer));
-  long long s_den = std::llround(std::sqrt((long double)r.denom));
+Rational operator *(int n, const Rational& r) {
+  return Rational(n) * r;
+}
 
-  if (s_num * s_num == r.numer && s_den * s_den == r.denom) {
-    return Rational(s_num, s_den);
-  }
+Rational Rational::sqrt(const Rational& S) {
+    // Проверка на отрицательное число
+    if (S.numer < 0) return Rational(-1, 1);
+    if (S.numer == 0) return Rational(0, 1);
 
-  // Возвращаем 0/1, если точный корень не найден
-  return Rational(0, 1);
+    // Преобразуем Rational в long double
+    long double value = (long double)S.numer / (long double)S.denom;
+
+    // Получаем мантиссу и экспоненту
+    int exp;
+    long double mantissa = frexp(value, &exp);
+
+    // Корректируем экспоненту для извлечения корня
+    if (exp % 2 != 0) {
+        exp--;
+        mantissa *= 2;
+    }
+
+    // Вавилонский метод для извлечения корня из мантиссы
+    long double sqrt_mantissa = mantissa;  // начальное приближение
+    for (int i = 0; i < 30; i++) {
+        sqrt_mantissa = (sqrt_mantissa + mantissa / sqrt_mantissa) / 2.0;
+    }
+
+    // Собираем результат
+    long double result = ldexp(sqrt_mantissa, exp / 2);
+
+    // Преобразуем обратно в Rational
+    const long long PRECISION = 1000000000;  // 10^9
+    long long result_num = std::llround(result * PRECISION);
+    long long result_den = PRECISION;
+
+    Rational res(result_num, result_den);
+    res.simplify();
+
+    return res;
 }
