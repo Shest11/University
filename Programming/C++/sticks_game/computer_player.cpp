@@ -47,7 +47,7 @@ vector<Move> ComputerPlayer::getWinningMoves(const Game& game) const {
     vector<Move> allMoves = getAllMoves(game);
 
     // проверяем каждый ход
-    for (const auto& move : allMoves) {
+    for (const Move& move : allMoves) {
         // если этот ход завершает квадрат - добавляем в список
         if (game.Move2Square(move.type, move.coord1, move.coord2)) {
             winningMoves.push_back(move);
